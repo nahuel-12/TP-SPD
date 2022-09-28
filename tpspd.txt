@@ -1,0 +1,56 @@
+// C++ code
+//https://www.tinkercad.com/things/arVqk9dxO0w-fantastic-robo/editel?sharecode=o-ysvTM0mu3E7dD8ZaQlrTH1GuDFWHrsYT9kIEqyC9k
+#define PAUSAC 3
+#define RESET 2
+#define PERIODO 1000
+
+/*variables globales del programa*/
+boolean state = false; //state = true cuenta, state = false no cuenta 
+int TiempoActual = 0;
+int segundos = 0; 
+int c, k;
+byte pins[10] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+
+void setup()
+{
+  for(int i = 0; i < 8; i++)
+  	pinMode(pins[i], OUTPUT); //activo como salida los pines conectados a los leds
+  pinMode (PAUSAC,INPUT);//ENTRADA PAUSA CONTINUAR
+  pinMode (RESET,INPUT);//ENTRADA RESET
+  pinMode(1,OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() 
+{
+	
+  if(digitalRead(PAUSAC))
+  {
+    delay(20);
+    state = !(state);
+  }
+  
+  if(digitalRead(RESET))
+  {
+    segundos = 0;
+    Serial.println("segundos = 0");
+  }
+  
+  
+  if(state)
+  {
+     TiempoActual = millis();
+     segundos = TiempoActual/1000;
+     //Serial.println(segundos);
+     for (c = 11; c >= 0; c--) 
+     {
+  		k = segundos >> c;
+    
+    	if (k & 1)
+      		digitalWrite(pins[c], HIGH);
+    	else
+      		digitalWrite(pins[c], LOW);
+ 	 }
+  } 
+}
+
